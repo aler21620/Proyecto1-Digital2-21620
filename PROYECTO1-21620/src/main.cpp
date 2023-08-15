@@ -45,7 +45,9 @@ float Voltage = 0.0;
 //**************************************************************************************************
 // Configuración
 //**************************************************************************************************
-
+void setup() {
+  Serial.begin(115200);
+}
 
 
 
@@ -53,7 +55,25 @@ float Voltage = 0.0;
 //**************************************************************************************************
 // Loop Principal
 //**************************************************************************************************
-
+void loop() {
+  // Read LM35_Sensor1 ADC Pin
+  LM35_Raw_Sensor1 = analogRead(LM35_Sensor1);  
+  // Calibrate ADC & Get Voltage (in mV)
+  Voltage = readADC_Cal(LM35_Raw_Sensor1);
+  // TempC = Voltage(mV) / 10
+  LM35_TempC_Sensor1 = Voltage / 10;
+  LM35_TempF_Sensor1 = (LM35_TempC_Sensor1 * 1.8) + 32;
+ 
+  // Print The Readings
+  Serial.print("Temperature = ");
+  Serial.print(LM35_TempC_Sensor1);
+  Serial.print(" °C , ");
+  Serial.print("Temperature = ");
+  Serial.print(LM35_TempF_Sensor1);
+  Serial.println(" °F");
+  
+  delay(100);
+}
 
 
 //**************************************************************************************************
