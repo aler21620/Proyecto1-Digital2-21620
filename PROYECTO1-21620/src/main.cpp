@@ -24,6 +24,7 @@
 #define pinLedY 18
 #define pinLedR 19
 #define pinPWMS 2    // GPIO 2 para tener la salida del PWM del servo 
+#define toma_TEMP 25 //Botón para la toma de temperatura
 
 //**************************************************************************************************
 // Prototipos de funciones
@@ -41,17 +42,19 @@ int LM35_Raw_Sensor1 = 0;
 float LM35_TempC_Sensor1 = 0.0;
 float LM35_TempF_Sensor1 = 0.0;
 float Voltage = 0.0; 
-
+int inicial = 90; //Ángulo inicial del servo 
 
 //**************************************************************************************************
 // Configuración
 //**************************************************************************************************
 void setup() {
+  pinMode(toma_TEMP, INPUT_PULLDOWN);
+  pinMode(pinLedG, OUTPUT);
+  pinMode(pinLedR, OUTPUT);
+  pinMode(pinLedY, OUTPUT);
+
   Serial.begin(115200);
 }
-
-
-
 
 //**************************************************************************************************
 // Loop Principal
@@ -76,10 +79,6 @@ void loop() {
   delay(100);
 }
 
-
-//**************************************************************************************************
-// Función para configurar módulo PWM
-//**************************************************************************************************
 
 
 
