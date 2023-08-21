@@ -77,6 +77,12 @@ void loop() {
   Serial.println(" °F");
   
   delay(100);
+
+  if(toma_TEMP == LOW){
+    digitalWrite(pinLedG, HIGH);
+    digitalWrite(pinLedR, HIGH);
+    digitalWrite(pinLedY, HIGH);
+  }
 }
 
 
