@@ -48,7 +48,7 @@ int inicial = 90; //Ángulo inicial del servo
 // Configuración
 //**************************************************************************************************
 void setup() {
-  pinMode(toma_TEMP, INPUT_PULLDOWN);
+  pinMode(toma_TEMP, INPUT_PULLUP);
   pinMode(pinLedG, OUTPUT);
   pinMode(pinLedR, OUTPUT);
   pinMode(pinLedY, OUTPUT);
@@ -65,7 +65,7 @@ void loop() {
   // Calibrate ADC & Get Voltage (in mV)
   Voltage = readADC_Cal(LM35_Raw_Sensor1);
   // TempC = Voltage(mV) / 10
-  LM35_TempC_Sensor1 = Voltage / 10;
+  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01 *0.8;
   LM35_TempF_Sensor1 = (LM35_TempC_Sensor1 * 1.8) + 32;
  
   // Print The Readings
@@ -78,11 +78,9 @@ void loop() {
   
   delay(100);
 
-  if(toma_TEMP == LOW){
-    digitalWrite(pinLedG, HIGH);
-    digitalWrite(pinLedR, HIGH);
-    digitalWrite(pinLedY, HIGH);
-  }
+  digitalWrite(pinLedG, HIGH);
+  digitalWrite(pinLedR, HIGH);
+  digitalWrite(pinLedY, HIGH);
 }
 
 
