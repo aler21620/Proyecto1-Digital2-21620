@@ -9,6 +9,7 @@
 //**************************************************************************************************
 #include <Arduino.h>
 #include "driver/ledc.h"
+//Crear librería paa control de los displays
 #include "esp_adc_cal.h"
 //falta la librería de Adafruit y el WIFI
 
@@ -25,6 +26,17 @@
 #define pinLedR 19
 #define pinPWMS 2    // GPIO 2 para tener la salida del PWM del servo 
 #define toma_TEMP 25 //Botón para la toma de temperatura
+
+//Pinout de los displays
+#define pinDisplayA 27
+#define pinDisplayB 13
+#define pinDisplayC 12
+#define pinDisplayD 22
+#define pinDisplayE 34
+#define pinDisplayF 26
+#define pinDisplayG 21
+//El pin del punto no lo coloco, debido a que siempre estará encendido en el mismo display, por lo que lo conecté directamente a voltaje
+
 
 //**************************************************************************************************
 // Prototipos de funciones
@@ -65,7 +77,7 @@ void loop() {
   // Calibrate ADC & Get Voltage (in mV)
   Voltage = readADC_Cal(LM35_Raw_Sensor1);
   // TempC = Voltage(mV) / 10
-  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01 *0.8;
+  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01;
   LM35_TempF_Sensor1 = (LM35_TempC_Sensor1 * 1.8) + 32;
  
   // Print The Readings
