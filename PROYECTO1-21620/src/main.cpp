@@ -11,14 +11,12 @@
 #include "driver/ledc.h"
 //Crear librería para control de los displays
 #include "esp_adc_cal.h"
-#include "config.h" //Archivo de librería de Adafruit y el WIFI
+//#include "config.h" //Archivo de librería de Adafruit y el WIFI
 
 //**************************************************************************************************
 // Conexión con ADAFRUIT IO
 //**************************************************************************************************
-#define IO_USERNAME  "aler21620"
-#define IO_KEY       "aio_ZnAT551Ex3hUpRMrU2UoAmDNw2Z7"
-
+//AdafruitIO_Feed *tempCanal = io.feed("Sensor");
 
 //**************************************************************************************************
 // Definición de etiquetas
@@ -106,12 +104,17 @@ void setup() {
   ledcWrite(0, map(180,0,180,0, 1023));
 
   Serial.begin(115200);
+
+  //while(! Serial);
+  //Serial.print("Conectando con Adafruit IO \n");
+  //io.connect();
 }
 
 //**************************************************************************************************
 // Loop Principal
 //**************************************************************************************************
 void loop() {
+  //io.run();
   // Read LM35_Sensor1 ADC Pin
   LM35_Raw_Sensor1 = analogRead(LM35_Sensor1);  
   // Calibrate ADC & Get Voltage (in mV)
