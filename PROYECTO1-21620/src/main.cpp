@@ -34,15 +34,19 @@
 #define toma_TEMP 25 //Botón para la toma de temperatura
 
 //Pinout de los displays
-#define pinDisplayA 27
-#define pinDisplayB 13
-#define pinDisplayC 12
-#define pinDisplayD 22
-#define pinDisplayE 34
-#define pinDisplayF 26
-#define pinDisplayG 21
+#define pinDisplayA 27 //Pin A intercontado con multiplexeo para los 3 displays
+#define pinDisplayB 13 //Pin B intercontado con multiplexeo para los 3 displays
+#define pinDisplayC 12 //Pin C intercontado con multiplexeo para los 3 displays
+#define pinDisplayD 22 //Pin D intercontado con multiplexeo para los 3 displays
+#define pinDisplayE 34 //Pin E intercontado con multiplexeo para los 3 displays
+#define pinDisplayF 26 //Pin F intercontado con multiplexeo para los 3 displays
+#define pinDisplayG 21 //Pin G intercontado con multiplexeo para los 3 displays
 //El pin del punto no lo coloco, debido a que siempre estará encendido en el mismo display, por lo que lo conecté directamente a voltaje
 
+//Pinout del COM de los displays, conectados a los transistores
+#define display1 23
+#define display2 32
+#define display3 
 
 //**************************************************************************************************
 // Prototipos de funciones
@@ -93,9 +97,15 @@ void loop() {
   
   delay(100);
 
+  digitalWrite(pinLedB, LOW);
   digitalWrite(pinLedG, HIGH);
+  delay(1000);
+  digitalWrite(pinLedG, LOW);
   digitalWrite(pinLedR, HIGH);
+  delay(1000);
+  digitalWrite(pinLedR, LOW);
   digitalWrite(pinLedB, HIGH);
+  delay(1000);
 }
 
 //****************************************************************
