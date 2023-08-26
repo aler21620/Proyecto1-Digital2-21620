@@ -114,7 +114,7 @@ void loop() {
   LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01;
 
   // Print The Readings
-  Serial.print("Temperatura = ");
+  Serial.print("Lectura de la temperatura = ");
   Serial.print(LM35_TempC_Sensor1);
   Serial.print(" °C \n");
   
@@ -129,18 +129,21 @@ void loop() {
     ledcWrite(ledGChannel, 255);
     ledcWrite(ledBChannel, 0);
     ledcWrite(pwmChannel, map(SERVO_LOW, 0, 180, 30, 115));
+    Serial.print("LED Verde encendido \n");  
   } else if (LM35_TempC_Sensor1 >= TEMP_LOW && LM35_TempC_Sensor1 < TEMP_MEDIUM) {
     // Amarillo
     ledcWrite(ledRChannel, 0);
     ledcWrite(ledGChannel, 0);
     ledcWrite(ledBChannel, 255);
     ledcWrite(pwmChannel, map(SERVO_MEDIUM, 0, 180, 30, 115));
+    Serial.print("LED Azul encendido \n");
   } else if (LM35_TempC_Sensor1 >= TEMP_MEDIUM && LM35_TempC_Sensor1 <= TEMP_HIGH) {
     // Rojo
     ledcWrite(ledRChannel, 255);
     ledcWrite(ledGChannel, 0);
     ledcWrite(ledBChannel, 0);
     ledcWrite(pwmChannel, map(SERVO_HIGH, 0, 180, 30, 115));
+    Serial.print("LED Rojo encendido \n");
   }
 
     
