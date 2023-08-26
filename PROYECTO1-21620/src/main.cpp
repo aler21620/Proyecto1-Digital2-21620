@@ -46,7 +46,7 @@
 //Pinout del COM de los displays, conectados a los transistores
 #define display1 23
 #define display2 32
-#define display3 
+#define display3 33
 
 //**************************************************************************************************
 // Prototipos de funciones
