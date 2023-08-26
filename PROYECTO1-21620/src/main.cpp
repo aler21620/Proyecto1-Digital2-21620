@@ -73,6 +73,9 @@ int decimal;
 const float TEMP_LOW = 25.0;
 const float TEMP_MEDIUM = 30.0; 
 const float TEMP_HIGH = 35.0; 
+int SERVO_LOW = 45; 
+int SERVO_MEDIUM = 90; 
+int SERVO_HIGH = 135; 
 
 //**************************************************************************************************
 // Configuración ADAFRUIT
@@ -125,19 +128,19 @@ void loop() {
     ledcWrite(ledRChannel, 0);
     ledcWrite(ledGChannel, 255);
     ledcWrite(ledBChannel, 0);
-    ledcWrite(pwmChannel, map(servoPositionBlue, 0, 180, 30, 115));
+    ledcWrite(pwmChannel, map(SERVO_LOW, 0, 180, 30, 115));
   } else if (LM35_TempC_Sensor1 >= TEMP_LOW && LM35_TempC_Sensor1 < TEMP_MEDIUM) {
     // Amarillo
     ledcWrite(ledRChannel, 0);
     ledcWrite(ledGChannel, 0);
     ledcWrite(ledBChannel, 255);
-    ledcWrite(pwmChannel, map(servoPositionBlue, 0, 180, 30, 115));
+    ledcWrite(pwmChannel, map(SERVO_MEDIUM, 0, 180, 30, 115));
   } else if (LM35_TempC_Sensor1 >= TEMP_MEDIUM && LM35_TempC_Sensor1 <= TEMP_HIGH) {
     // Rojo
     ledcWrite(ledRChannel, 255);
     ledcWrite(ledGChannel, 0);
     ledcWrite(ledBChannel, 0);
-    ledcWrite(pwmChannel, map(servoPositionBlue, 0, 180, 30, 115));
+    ledcWrite(pwmChannel, map(SERVO_HIGH, 0, 180, 30, 115));
   }
 
     
@@ -154,7 +157,7 @@ void loop() {
   ledcWrite(ledBChannel, brillo);
   delay(1000);*/
 
-  ledcWrite(pwmChannel, map(inicial, 0, 180, 30, 115)); // Mapear el ángulo a la escala del servomotor (ajustar según sea necesario)
+  //ledcWrite(pwmChannel, map(inicial, 0, 180, 30, 115)); // Mapear el ángulo a la escala del servomotor (ajustar según sea necesario)
 }
 
 //****************************************************************
