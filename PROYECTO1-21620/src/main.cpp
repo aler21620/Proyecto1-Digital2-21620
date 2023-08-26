@@ -19,11 +19,17 @@
 //**************************************************************************************************
 #define LM35_Sensor1 35 //Sensor de temperatura 
 #define pwmChannel 0 // 16 canales 0-15
+#define ledRChannel 1
+#define ledGChannel 2
+#define ledBChannel 3
+#define freqPWM 5000 //Frencuencia en Hz para el uso de las leds
 #define freqPWMS 50   // Frecuencia en Hz (se ajusta a 50Hz para controlar el servomotor)
+#define resolution 8 //Resolución de 1 a 16 bits para la led RGB
 #define resolutionS 10 // 1-16 bits de resolución del servo
-#define pinLedG 5 
-#define pinLedY 18
-#define pinLedR 19
+#define pinLedR 5 
+#define pinLedB 18
+#define pinLedG 19
+#define pinPWM 15 //GPIO para tener la salida del PWM
 #define pinPWMS 2    // GPIO 2 para tener la salida del PWM del servo 
 #define toma_TEMP 25 //Botón para la toma de temperatura
 
@@ -41,11 +47,8 @@
 //**************************************************************************************************
 // Prototipos de funciones
 //**************************************************************************************************
-uint32_t readADC_Cal(int ADC_Raw) {
-  esp_adc_cal_characteristics_t adc_chars;
-  esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_12, 1100, &adc_chars);
-  return(esp_adc_cal_raw_to_voltage(ADC_Raw, &adc_chars));
-}
+uint32_t readADC_Cal(int ADC_Raw); 
+void configurarPWM(void);
 
 //**************************************************************************************************
 // Variables Globales
@@ -63,7 +66,7 @@ void setup() {
   pinMode(toma_TEMP, INPUT_PULLUP);
   pinMode(pinLedG, OUTPUT);
   pinMode(pinLedR, OUTPUT);
-  pinMode(pinLedY, OUTPUT);
+  pinMode(pinLedB, OUTPUT);
 
   Serial.begin(115200);
 }
@@ -92,9 +95,31 @@ void loop() {
 
   digitalWrite(pinLedG, HIGH);
   digitalWrite(pinLedR, HIGH);
-  digitalWrite(pinLedY, HIGH);
+  digitalWrite(pinLedB, HIGH);
 }
 
+//****************************************************************
+// Función para leer el sensor de temperatura
+//****************************************************************
+uint32_t readADC_Cal(int ADC_Raw) {
+  esp_adc_cal_characteristics_t adc_chars;
+  esp_adc_cal_characterize(ADC_UNIT_1, ADC_ATTEN_DB_11, ADC_WIDTH_BIT_12, 1100, &adc_chars);
+  return(esp_adc_cal_raw_to_voltage(ADC_Raw, &adc_chars));
+}
 
+//****************************************************************
+// Función para configurar módulo PWM de la led RGB
+//****************************************************************
+void configurarPWM(void) {
+  // Paso 1: Configurar el módulo PWM
+  ledcSetup(pwmChannel, freqPWM, resolution);
+  ledcSetup(ledRChannel, freqPWM, resolution);
+  ledcSetup(ledGChannel, freqPWM, resolution);
+  ledcSetup(ledBChannel, freqPWM, resolution);
 
-
+  // Paso 2: seleccionar en qué GPIO tendremos nuestra señal PWM
+  ledcAttachPin(pinPWM, pwmChannel);
+  ledcAttachPin(pinLedR, ledRChannel);
+  ledcAttachPin(pinLedG, ledGChannel);
+  ledcAttachPin(pinLedB, ledBChannel);
+}
