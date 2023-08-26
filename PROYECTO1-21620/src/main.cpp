@@ -69,6 +69,11 @@ int decena;
 int unidad; 
 int decimal; 
 
+//Variables para identificar la temperatura, según la tabla de proyecto 
+const float TEMP_LOW = 25.0;
+const float TEMP_MEDIUM = 30.0; 
+const float TEMP_HIGH = 35.0; 
+
 //**************************************************************************************************
 // Configuración ADAFRUIT
 //**************************************************************************************************
@@ -112,6 +117,25 @@ void loop() {
   
   delay(100);
 
+  if (LM35_TempC_Sensor1 < TEMP_LOW) {
+    // Verde
+    ledcWrite(ledRChannel, 0);
+    ledcWrite(ledGChannel, 255);
+    ledcWrite(ledBChannel, 0);
+  } else if (LM35_TempC_Sensor1 >= TEMP_LOW && LM35_TempC_Sensor1 < TEMP_MEDIUM) {
+    // Amarillo
+    ledcWrite(ledRChannel, 0);
+    ledcWrite(ledGChannel, 0);
+    ledcWrite(ledBChannel, 255);
+  } else if (LM35_TempC_Sensor1 >= TEMP_MEDIUM && LM35_TempC_Sensor1 <= TEMP_HIGH) {
+    // Rojo
+    ledcWrite(ledRChannel, 255);
+    ledcWrite(ledGChannel, 0);
+    ledcWrite(ledBChannel, 0);
+  }
+
+
+/*
   ledcWrite(ledBChannel, 0);
   ledcWrite(ledGChannel, brillo);
   delay(1000);
@@ -120,7 +144,9 @@ void loop() {
   delay(1000);
   ledcWrite(ledRChannel, 0);
   ledcWrite(ledBChannel, brillo);
-  delay(1000);
+  delay(1000);*/
+
+  ledcWrite(pwmChannel, map(inicial, 0, 180, 30, 115)); // Mapear el ángulo a la escala del servomotor (ajustar según sea necesario)
 }
 
 //****************************************************************
