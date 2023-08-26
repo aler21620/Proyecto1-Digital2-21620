@@ -9,7 +9,7 @@
 //**************************************************************************************************
 #include <Arduino.h>
 #include "driver/ledc.h"
-//Crear librería paa control de los displays
+//Crear librería para control de los displays
 #include "esp_adc_cal.h"
 //falta la librería de Adafruit y el WIFI
 
