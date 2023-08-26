@@ -51,15 +51,16 @@
 //**************************************************************************************************
 // Prototipos de funciones
 //**************************************************************************************************
-uint32_t readADC_Cal(int ADC_Raw); 
-void configurarPWM(void);
+uint32_t readADC_Cal(int ADC_Raw); //Función para leer el sensor de temperatura con ADC de ESP32
+void configurarPWM(void); //Función para configurar el PWM de las leds, el del servo está configurado en el setup
+void temperatura_led(void); //Función para indicar la led que tiene que encender según la temperatura
+
 
 //**************************************************************************************************
 // Variables Globales
 //**************************************************************************************************
-int LM35_Raw_Sensor1 = 0;
-float LM35_TempC_Sensor1 = 0.0;
-float LM35_TempF_Sensor1 = 0.0;
+int LM35_Raw_Sensor1 = 0; //En donde inicia el sensor
+float LM35_TempC_Sensor1 = 0.0; //Temperatura en grados centígrados
 float Voltage = 0.0; 
 int inicial = 90; //Ángulo inicial del servo 
 
@@ -85,15 +86,11 @@ void loop() {
   Voltage = readADC_Cal(LM35_Raw_Sensor1);
   // TempC = Voltage(mV) / 10
   LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01;
-  LM35_TempF_Sensor1 = (LM35_TempC_Sensor1 * 1.8) + 32;
- 
+
   // Print The Readings
   Serial.print("Temperature = ");
   Serial.print(LM35_TempC_Sensor1);
   Serial.print(" °C , ");
-  Serial.print("Temperature = ");
-  Serial.print(LM35_TempF_Sensor1);
-  Serial.println(" °F");
   
   delay(100);
 
