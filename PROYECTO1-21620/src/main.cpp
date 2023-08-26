@@ -1,5 +1,5 @@
 //**************************************************************************************************
-//Proyecto 1 - Digital 2
+//BE3029 - Proyecto 1 - Digital 2
 //María Alejandra Rodríguez Roldán 
 //No. 21620 
 //**************************************************************************************************
@@ -11,7 +11,13 @@
 #include "driver/ledc.h"
 //Crear librería para control de los displays
 #include "esp_adc_cal.h"
-//falta la librería de Adafruit y el WIFI
+#include "config.h" //Archivo de librería de Adafruit y el WIFI
+
+//**************************************************************************************************
+// Conexión con ADAFRUIT IO
+//**************************************************************************************************
+#define IO_USERNAME  "aler21620"
+#define IO_KEY       "aio_ZnAT551Ex3hUpRMrU2UoAmDNw2Z7"
 
 
 //**************************************************************************************************
