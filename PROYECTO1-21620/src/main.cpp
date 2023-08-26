@@ -117,22 +117,30 @@ void loop() {
   
   delay(100);
 
+  //Para el semáforo de temperatura, al estar utilizando un led RGB, los colores indican lo siguiente: 
+  //En la guía del proyecto, VERDE es menor a 37.0 °C, AMARILLO es mayor a 37.0 °C y menor a 37.5 °C y ROJO es mayor a 37.5 °C.
+  //Con el LED RGB VERDE es menor a 37.0 °C, AZUL es mayor a 37.0 °C y menor a 37.5 °C y ROJO es mayor a 37.5 °C.
   if (LM35_TempC_Sensor1 < TEMP_LOW) {
     // Verde
     ledcWrite(ledRChannel, 0);
     ledcWrite(ledGChannel, 255);
     ledcWrite(ledBChannel, 0);
+    ledcWrite(pwmChannel, map(servoPositionBlue, 0, 180, 30, 115));
   } else if (LM35_TempC_Sensor1 >= TEMP_LOW && LM35_TempC_Sensor1 < TEMP_MEDIUM) {
     // Amarillo
     ledcWrite(ledRChannel, 0);
     ledcWrite(ledGChannel, 0);
     ledcWrite(ledBChannel, 255);
+    ledcWrite(pwmChannel, map(servoPositionBlue, 0, 180, 30, 115));
   } else if (LM35_TempC_Sensor1 >= TEMP_MEDIUM && LM35_TempC_Sensor1 <= TEMP_HIGH) {
     // Rojo
     ledcWrite(ledRChannel, 255);
     ledcWrite(ledGChannel, 0);
     ledcWrite(ledBChannel, 0);
+    ledcWrite(pwmChannel, map(servoPositionBlue, 0, 180, 30, 115));
   }
+
+    
 
 
 /*
