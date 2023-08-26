@@ -63,15 +63,33 @@ int LM35_Raw_Sensor1 = 0; //En donde inicia el sensor
 float LM35_TempC_Sensor1 = 0.0; //Temperatura en grados centígrados
 float Voltage = 0.0; 
 int inicial = 90; //Ángulo inicial del servo 
+int brillo = 255; //Brillo del led RGB
+//Variables para colocar los valores de temperatura en el display
+int decena; 
+int unidad; 
+int decimal; 
+
+//**************************************************************************************************
+// Configuración ADAFRUIT
+//**************************************************************************************************
+//Colocar el canal que se está utilizando 
+
+
 
 //**************************************************************************************************
 // Configuración
 //**************************************************************************************************
 void setup() {
   pinMode(toma_TEMP, INPUT_PULLUP);
-  pinMode(pinLedG, OUTPUT);
-  pinMode(pinLedR, OUTPUT);
-  pinMode(pinLedB, OUTPUT);
+  configurarPWM();
+
+  //Configuración del PWM para el servo motor
+  // Paso 1: Configurar el módulo PWM
+  ledcSetup(pwmChannel, freqPWMS, resolutionS);
+  // Paso 2: seleccionar en qué GPIO tendremos nuestra señal PWM
+  ledcAttachPin(pinPWMS, pwmChannel);
+  //Paso 3: Establecer la posición del servo motor inicialmente
+  ledcWrite(0, map(180,0,180,0, 1023));
 
   Serial.begin(115200);
 }
@@ -88,20 +106,20 @@ void loop() {
   LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01;
 
   // Print The Readings
-  Serial.print("Temperature = ");
+  Serial.print("Temperatura = ");
   Serial.print(LM35_TempC_Sensor1);
-  Serial.print(" °C , ");
+  Serial.print(" °C \n");
   
   delay(100);
 
-  digitalWrite(pinLedB, LOW);
-  digitalWrite(pinLedG, HIGH);
+  ledcWrite(ledBChannel, 0);
+  ledcWrite(ledGChannel, brillo);
   delay(1000);
-  digitalWrite(pinLedG, LOW);
-  digitalWrite(pinLedR, HIGH);
+  ledcWrite(ledGChannel, 0);
+  ledcWrite(ledRChannel, brillo);
   delay(1000);
-  digitalWrite(pinLedR, LOW);
-  digitalWrite(pinLedB, HIGH);
+  ledcWrite(ledRChannel, 0);
+  ledcWrite(ledBChannel, brillo);
   delay(1000);
 }
 
