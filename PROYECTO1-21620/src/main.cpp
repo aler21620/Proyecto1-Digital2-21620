@@ -11,7 +11,7 @@
 #include "driver/ledc.h"
 //Crear librería para control de los displays
 #include "esp_adc_cal.h"
-//#include "config.h" //Archivo de librería de Adafruit y el WIFI
+#include "config.h" //Archivo de librería de Adafruit y el WIFI
 
 //**************************************************************************************************
 // Conexión con ADAFRUIT IO
@@ -66,8 +66,7 @@ void temperatura_led(void); //Función para indicar la led que tiene que encende
 int LM35_Raw_Sensor1 = 0; //En donde inicia el sensor
 float LM35_TempC_Sensor1 = 0.0; //Temperatura en grados centígrados
 float Voltage = 0.0; 
-int inicial = 90; //Ángulo inicial del servo 
-int brillo = 255; //Brillo del led RGB
+int botonpresionado = 0; //Almacena el estado del botón
 //Variables para colocar los valores de temperatura en el display
 int decena; 
 int unidad; 
@@ -115,61 +114,46 @@ void setup() {
 //**************************************************************************************************
 void loop() {
   //io.run();
-  // Read LM35_Sensor1 ADC Pin
-  LM35_Raw_Sensor1 = analogRead(LM35_Sensor1);  
-  // Calibrate ADC & Get Voltage (in mV)
-  Voltage = readADC_Cal(LM35_Raw_Sensor1);
-  // TempC = Voltage(mV) / 10
-  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01;
 
-  // Print The Readings
-  Serial.print("Lectura de la temperatura = ");
-  Serial.print(LM35_TempC_Sensor1);
-  Serial.print(" °C \n");
-  
+  botonpresionado = digitalRead(toma_TEMP);
   delay(100);
 
-  //Para el semáforo de temperatura, al estar utilizando un led RGB, los colores indican lo siguiente: 
-  //En la guía del proyecto, VERDE es menor a 37.0 °C, AMARILLO es mayor a 37.0 °C y menor a 37.5 °C y ROJO es mayor a 37.5 °C.
-  //Con el LED RGB VERDE es menor a 37.0 °C, AZUL es mayor a 37.0 °C y menor a 37.5 °C y ROJO es mayor a 37.5 °C.
-  if (LM35_TempC_Sensor1 < TEMP_LOW) {
-    // Verde
-    ledcWrite(ledRChannel, 0);
-    ledcWrite(ledGChannel, 255);
-    ledcWrite(ledBChannel, 0);
-    ledcWrite(pwmChannel, map(SERVO_LOW, 0, 180, 30, 115));
-    Serial.print("LED Verde encendido \n");  
-  } else if (LM35_TempC_Sensor1 >= TEMP_LOW && LM35_TempC_Sensor1 < TEMP_MEDIUM) {
-    // Amarillo
-    ledcWrite(ledRChannel, 0);
-    ledcWrite(ledGChannel, 0);
-    ledcWrite(ledBChannel, 255);
-    ledcWrite(pwmChannel, map(SERVO_MEDIUM, 0, 180, 30, 115));
-    Serial.print("LED Azul encendido \n");
-  } else if (LM35_TempC_Sensor1 >= TEMP_MEDIUM && LM35_TempC_Sensor1 <= TEMP_HIGH) {
-    // Rojo
-    ledcWrite(ledRChannel, 255);
-    ledcWrite(ledGChannel, 0);
-    ledcWrite(ledBChannel, 0);
-    ledcWrite(pwmChannel, map(SERVO_HIGH, 0, 180, 30, 115));
-    Serial.print("LED Rojo encendido \n");
-  }
-
+  if (botonpresionado == LOW) {
+    // Read LM35_Sensor1 ADC Pin
+    LM35_Raw_Sensor1 = analogRead(LM35_Sensor1);  
+    // Calibrate ADC & Get Voltage (in mV)
+    Voltage = readADC_Cal(LM35_Raw_Sensor1);
+    // TempC = Voltage(mV) / 10
+    LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01;
     
+    // Print The Readings
+    Serial.print("Lectura de la temperatura = ");
+    Serial.print(LM35_TempC_Sensor1);
+    Serial.print(" °C \n");
 
-
-/*
-  ledcWrite(ledBChannel, 0);
-  ledcWrite(ledGChannel, brillo);
-  delay(1000);
-  ledcWrite(ledGChannel, 0);
-  ledcWrite(ledRChannel, brillo);
-  delay(1000);
-  ledcWrite(ledRChannel, 0);
-  ledcWrite(ledBChannel, brillo);
-  delay(1000);*/
-
-  //ledcWrite(pwmChannel, map(inicial, 0, 180, 30, 115)); // Mapear el ángulo a la escala del servomotor (ajustar según sea necesario)
+    //Para el semáforo de temperatura, al estar utilizando un led RGB, los colores indican lo siguiente: 
+    //En la guía del proyecto, VERDE es menor a 37.0 °C, AMARILLO es mayor a 37.0 °C y menor a 37.5 °C y ROJO es mayor a 37.5 °C.
+    //Con el LED RGB VERDE es menor a 37.0 °C, AZUL es mayor a 37.0 °C y menor a 37.5 °C y ROJO es mayor a 37.5 °C.
+    if (LM35_TempC_Sensor1 < TEMP_LOW) {
+      ledcWrite(ledRChannel, 0);
+      ledcWrite(ledGChannel, 255);
+      ledcWrite(ledBChannel, 0);
+      ledcWrite(pwmChannel, map(SERVO_LOW, 0, 180, 30, 115));
+      Serial.print("LED Verde encendido \n");  
+    } else if (LM35_TempC_Sensor1 >= TEMP_LOW && LM35_TempC_Sensor1 < TEMP_MEDIUM) {
+      ledcWrite(ledRChannel, 0);
+      ledcWrite(ledGChannel, 0);
+      ledcWrite(ledBChannel, 255);
+      ledcWrite(pwmChannel, map(SERVO_MEDIUM, 0, 180, 30, 115));
+      Serial.print("LED Azul encendido \n");
+    } else if (LM35_TempC_Sensor1 >= TEMP_MEDIUM && LM35_TempC_Sensor1 <= TEMP_HIGH) {
+      ledcWrite(ledRChannel, 255);
+      ledcWrite(ledGChannel, 0);
+      ledcWrite(ledBChannel, 0);
+      ledcWrite(pwmChannel, map(SERVO_HIGH, 0, 180, 30, 115));
+      Serial.print("LED Rojo encendido \n");
+    }
+  }
 }
 
 //****************************************************************
