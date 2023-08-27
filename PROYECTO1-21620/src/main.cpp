@@ -166,7 +166,7 @@ void temperatura_led(void){
   // Calibrate ADC & Get Voltage (in mV)
   Voltage = readADC_Cal(LM35_Raw_Sensor1);
   // TempC = función con respecto al voltaje
-  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01;
+  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01 *0.8; //Se multiplica por factor de 0.8 para que lea la temperatura correcta
   
   // Imprimir las lecturas
   Serial.print("Lectura de la temperatura = ");
