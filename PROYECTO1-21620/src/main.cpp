@@ -9,7 +9,7 @@
 //**************************************************************************************************
 #include <Arduino.h>
 #include "driver/ledc.h"
-//Crear librería para control de los displays
+#include "display7.h"  //Crear librería para control de los displays
 #include "esp_adc_cal.h"
 #include "config.h" //Archivo de librería de Adafruit y el WIFI
 
@@ -42,7 +42,7 @@
 #define pinDisplayB 13 //Pin B intercontado con multiplexeo para los 3 displays
 #define pinDisplayC 12 //Pin C intercontado con multiplexeo para los 3 displays
 #define pinDisplayD 22 //Pin D intercontado con multiplexeo para los 3 displays
-#define pinDisplayE 34 //Pin E intercontado con multiplexeo para los 3 displays
+#define pinDisplayE 4 //Pin E intercontado con multiplexeo para los 3 displays
 #define pinDisplayF 26 //Pin F intercontado con multiplexeo para los 3 displays
 #define pinDisplayG 21 //Pin G intercontado con multiplexeo para los 3 displays
 //El pin del punto no lo coloco, debido a que siempre estará encendido en el mismo display, por lo que lo conecté directamente a voltaje
@@ -58,7 +58,6 @@
 uint32_t readADC_Cal(int ADC_Raw); //Función para leer el sensor de temperatura con ADC de ESP32
 void configurarPWM(void); //Función para configurar el PWM de las leds, el del servo está configurado en el setup
 void temperatura_led(void); //Función para indicar la led que tiene que encender según la temperatura
-
 
 //**************************************************************************************************
 // Variables Globales
@@ -95,6 +94,16 @@ int SERVO_HIGH = 135;
 void setup() {
   pinMode(toma_TEMP, INPUT_PULLUP);
   configurarPWM();
+  configdisplay7(pinDisplayA, pinDisplayB, pinDisplayC, pinDisplayD, pinDisplayE, pinDisplayF, pinDisplayG);
+
+  pinMode(display1, OUTPUT);
+  pinMode(display2, OUTPUT);
+  pinMode(display3, OUTPUT);
+
+  //Configuración de los transistores del multiplexeo
+  digitalWrite(display1, LOW);
+  digitalWrite(display2, LOW);
+  digitalWrite(display3, LOW);
 
   //Configuración del PWM para el servo motor
   // Paso 1: Configurar el módulo PWM
@@ -129,6 +138,24 @@ void loop() {
     delay(100);
     bandera = false; 
   }
+
+  digitalWrite(display1, HIGH);
+  digitalWrite(display2, LOW);
+  digitalWrite(display3, LOW);
+  valor(0);
+  delay(100);
+/*
+  digitalWrite(display1, LOW);
+  digitalWrite(display2, HIGH);
+  digitalWrite(display3, LOW);
+  valor(1);
+  delay(100);
+
+  digitalWrite(display1, LOW);
+  digitalWrite(display2, LOW);
+  digitalWrite(display3, HIGH);
+  valor(2);
+  delay(100); */
 }
 
 //****************************************************************
@@ -166,7 +193,7 @@ void temperatura_led(void){
   // Calibrate ADC & Get Voltage (in mV)
   Voltage = readADC_Cal(LM35_Raw_Sensor1);
   // TempC = función con respecto al voltaje
-  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01 *0.8; //Se multiplica por factor de 0.8 para que lea la temperatura correcta
+  LM35_TempC_Sensor1 = ((Voltage/4095)*3.25) / 0.01; //De ser necesario se multiplica por un factor para que lea correctamente la temperatura
   
   // Imprimir las lecturas
   Serial.print("Lectura de la temperatura = ");
