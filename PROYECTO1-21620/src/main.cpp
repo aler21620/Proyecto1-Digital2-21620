@@ -16,6 +16,7 @@
 // Conexión con ADAFRUIT IO
 //**************************************************************************************************
 AdafruitIO_Feed *tempCanal = io.feed("Sensor");
+AdafruitIO_Feed *LedCanal = io.feed("canalLed");
 
 //**************************************************************************************************
 // Definición de etiquetas
@@ -44,6 +45,7 @@ void configurarPWM(void); //Función para configurar el PWM de las leds, el del 
 void temperatura_led(void); //Función para indicar la led que tiene que encender según la temperatura
 void displays(void);  //Función para inicializar los displays y mostrar el valor 
 void valor_temperatura(void); //Función para arreglar el valor de temperatura y poder mostrarlo en los displays
+void handleMessage(AdafruitIO_Data *data);
 
 //**************************************************************************************************
 // Variables Globales
@@ -54,6 +56,9 @@ float Voltage = 0.0;
 int botonpresionado; //Almacena el estado del botón
 int botonanterior = 1; 
 bool bandera = false; 
+bool estadoR = false; 
+bool estadoB = false; 
+bool estadoG = false; 
 //Variables para colocar los valores de temperatura en el display
 int decena; 
 int unidad; 
@@ -71,13 +76,6 @@ const float TEMP_HIGH = 35.0;
 int SERVO_LOW = 45; 
 int SERVO_MEDIUM = 90; 
 int SERVO_HIGH = 135; 
-
-//**************************************************************************************************
-// Configuración ADAFRUIT
-//**************************************************************************************************
-
-
-
 
 //**************************************************************************************************
 // Configuración
@@ -107,8 +105,20 @@ void setup() {
   while(! Serial);
   Serial.print("Conectando con Adafruit IO \n");
   io.connect();
+  LedCanal->onMessage(handleMessage);
+
+  while(io.status()< AIO_CONNECTED){
+    Serial.print(".");
+    delay(500);
+  }
+
+  LedCanal->get();
+
   Serial.println(); 
   Serial.println(io.statusText());
+  estadoR = false;
+  estadoB = false;
+  estadoG = false; 
 }
 
 //**************************************************************************************************
@@ -140,6 +150,18 @@ void loop() {
   Serial.print("sending ->");
   Serial.println(LM35_TempC_Sensor1);
   tempCanal-> save(LM35_TempC_Sensor1);
+
+  if(estadoR == true) {
+    ledcWrite(ledRChannel, 255);
+  }
+
+  if(estadoB == true) {
+    ledcWrite(ledBChannel, 255);
+  }
+
+  if(estadoG == true) {
+    ledcWrite(ledGChannel, 255);
+  }
 
   delay(3000);
 }
@@ -258,4 +280,29 @@ void valor_temperatura(){
   valorestemperatura[2] = ((temperatura) / 10) % 10;
   valorestemperatura[1] = ((temperatura) / 100) % 10;
   valorestemperatura[0] = ((temperatura) / 1000) % 10;
+}
+
+//************************************************************************
+//Función para LED en Adafruit
+//************************************************************************
+void handleMessage(AdafruitIO_Data *data) {
+  Serial.print("recieved <-");
+  Serial.println(data->value());
+  if(*data->value() == '1'){
+    estadoR = true; 
+  } else{
+    estadoR = false;
+  }
+
+  if(*data->value() == '2'){
+    estadoB = true; 
+  } else{
+    estadoB = false;
+  }
+
+  if(*data->value() == '4'){
+    estadoG = true; 
+  } else{
+    estadoG = false;
+  }
 }
