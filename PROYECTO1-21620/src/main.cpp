@@ -15,7 +15,7 @@
 //**************************************************************************************************
 // Conexión con ADAFRUIT IO
 //**************************************************************************************************
-//AdafruitIO_Feed *tempCanal = io.feed("Sensor");
+AdafruitIO_Feed *tempCanal = io.feed("Sensor");
 
 //**************************************************************************************************
 // Definición de etiquetas
@@ -75,7 +75,7 @@ int SERVO_HIGH = 135;
 //**************************************************************************************************
 // Configuración ADAFRUIT
 //**************************************************************************************************
-//Colocar el canal que se está utilizando 
+
 
 
 
@@ -104,16 +104,19 @@ void setup() {
 
   Serial.begin(115200);
 
-  //while(! Serial);
-  //Serial.print("Conectando con Adafruit IO \n");
-  //io.connect();
+  while(! Serial);
+  Serial.print("Conectando con Adafruit IO \n");
+  io.connect();
+  Serial.println(); 
+  Serial.println(io.statusText());
 }
 
 //**************************************************************************************************
 // Loop Principal
 //**************************************************************************************************
 void loop() {
-  //io.run();
+  io.run();
+
   botonpresionado = digitalRead(toma_TEMP);
   delay(100);
 
@@ -133,6 +136,12 @@ void loop() {
       }
     }
   }
+
+  Serial.print("sending ->");
+  Serial.println(LM35_TempC_Sensor1);
+  tempCanal-> save(LM35_TempC_Sensor1);
+
+  delay(3000);
 }
 
 //****************************************************************
