@@ -10,13 +10,14 @@
 #include <Arduino.h>
 #include "driver/ledc.h"
 #include "esp_adc_cal.h"
+#include "display7.h"
 #include "config.h" //Archivo de librería de Adafruit y el WIFI
 
 //**************************************************************************************************
 // Conexión con ADAFRUIT IO
 //**************************************************************************************************
-AdafruitIO_Feed *tempCanal = io.feed("Sensor");
-AdafruitIO_Feed *LedCanal = io.feed("canalLed");
+//AdafruitIO_Feed *tempCanal = io.feed("Sensor");
+//AdafruitIO_Feed *LedCanal = io.feed("canalLed");
 
 //**************************************************************************************************
 // Definición de etiquetas
@@ -37,6 +38,18 @@ AdafruitIO_Feed *LedCanal = io.feed("canalLed");
 #define pinPWMS 2    // GPIO 2 para tener la salida del PWM del servo 
 #define toma_TEMP 25 //Botón para la toma de temperatura
 
+#define pinDisplayB 13 //Pin B intercontado con multiplexeo para los 3 displays
+#define pinDisplayC 12 //Pin C intercontado con multiplexeo para los 3 displays
+#define pinDisplayD 22 //Pin D intercontado con multiplexeo para los 3 displays
+#define pinDisplayE 4 //Pin E intercontado con multiplexeo para los 3 displays
+#define pinDisplayF 26 //Pin F intercontado con multiplexeo para los 3 displays
+#define pinDisplayG 21 //Pin G intercontado con multiplexeo para los 3 displays
+//El pin del punto no lo coloco, debido a que siempre estará encendido en el mismo display, por lo que lo conecté directamente a voltaje
+
+#define display1 23
+#define display2 32
+#define display3 33
+
 //**************************************************************************************************
 // Prototipos de funciones
 //**************************************************************************************************
@@ -45,7 +58,7 @@ void configurarPWM(void); //Función para configurar el PWM de las leds, el del 
 void temperatura_led(void); //Función para indicar la led que tiene que encender según la temperatura
 void displays(void);  //Función para inicializar los displays y mostrar el valor 
 void valor_temperatura(void); //Función para arreglar el valor de temperatura y poder mostrarlo en los displays
-void handleMessage(AdafruitIO_Data *data);
+//void handleMessage(AdafruitIO_Data *data);
 
 //**************************************************************************************************
 // Variables Globales
@@ -59,10 +72,7 @@ bool bandera = false;
 bool estadoR = false; 
 bool estadoB = false; 
 bool estadoG = false; 
-//Variables para colocar los valores de temperatura en el display
-int decena; 
-int unidad; 
-int decimal; 
+
 
 int pinesDisplay[7] = {27, 13, 12, 22, 4, 26, 21}; //No coloco el pin del punto debido a que siempre estará encendido
 int pinesTransistores[3] = {23, 32, 33};
@@ -83,14 +93,24 @@ int SERVO_HIGH = 135;
 void setup() {
   pinMode(toma_TEMP, INPUT_PULLUP);
   configurarPWM();
+  configdisplay7(pinDisplayA, pinDisplayB, pinDisplayC, pinDisplayD, pinDisplayE, pinDisplayF, pinDisplayG);
 
+  pinMode(display1, OUTPUT);
+  pinMode(display2, OUTPUT);
+  pinMode(display3, OUTPUT);
+  //Configuración de los transistores del multiplexeo
+  digitalWrite(display1, LOW);
+  digitalWrite(display2, LOW);
+  digitalWrite(display3, LOW); 
+
+/*
   for (int i = 0; i < 7; i++) {
     pinMode(pinesDisplay[i], OUTPUT);
   }
 
   for (int i = 0; i < 3; i++) {
     pinMode(pinesTransistores[i], OUTPUT);
-  }
+  }*/
 
   //Configuración del PWM para el servo motor
   // Paso 1: Configurar el módulo PWM
@@ -102,7 +122,7 @@ void setup() {
 
   Serial.begin(115200);
 
-  while(! Serial);
+  /*while(! Serial);
   Serial.print("Conectando con Adafruit IO \n");
   io.connect();
   LedCanal->onMessage(handleMessage);
@@ -118,17 +138,38 @@ void setup() {
   Serial.println(io.statusText());
   estadoR = false;
   estadoB = false;
-  estadoG = false; 
+  estadoG = false; */
 }
 
 //**************************************************************************************************
 // Loop Principal
 //**************************************************************************************************
 void loop() {
-  io.run();
+  int temperatura = int(LM35_TempC_Sensor1);
+  int decena = temperatura/100; 
+  int unidad = decena % 10; 
+  int decimal = int((LM35_TempC_Sensor1- temperatura)*10); 
+  
+  digitalWrite(display1, HIGH);
+  digitalWrite(display2, LOW); 
+  digitalWrite(display3, LOW);
+  valor(1);//decena);
+  delay(5);
 
+  digitalWrite(display1, LOW);
+  digitalWrite(display2, HIGH); 
+  digitalWrite(display3, LOW);
+  valor(2);//unidad);
+  delay(5);
+
+  digitalWrite(display1, LOW);
+  digitalWrite(display2, LOW); 
+  digitalWrite(display3, HIGH);
+  valor(3);//decimal);
+  delay(5);
+   
   botonpresionado = digitalRead(toma_TEMP);
-  delay(100);
+  //delay(100);
 
   if (!displaysencendidos && botonpresionado == LOW) {
     displaysencendidos = true;
@@ -139,13 +180,17 @@ void loop() {
     if(displaysencendidos){
       if (bandera) {
         temperatura_led();
-        valor_temperatura();
-        displays();
         delay(100);
         bandera = false; 
       }
     }
   }
+
+    
+  //displays();
+  //valor_temperatura();
+  //delay(100);
+ /* io.run();
 
   Serial.print("sending ->");
   Serial.println(LM35_TempC_Sensor1);
@@ -163,7 +208,8 @@ void loop() {
     ledcWrite(ledGChannel, 255);
   }
 
-  delay(3000);
+  delay(3000);*/
+
 }
 
 //****************************************************************
@@ -235,7 +281,7 @@ void temperatura_led(void){
 //************************************************************************
 // Función para mostrar el valor de temperatura en los displays
 //************************************************************************
-void displays(){
+/*void displays(){
   //Esta variable, va a permitir tener todos los valores de los segmentos para mostrar en el display
   //Por ser un display de cátodo, el 1 significa que se va a encender y el 0 que se va a apagar
   int numeros[10][7] = {
@@ -266,7 +312,7 @@ void displays(){
       digitalWrite(pinesDisplay[j], numeros[valorestemperatura[n]][j]);
     }
 
-    delay(5); //Se coloca este delay para que no se perciba el cambio en los displays por el ojo humano
+    //delay(5); //Se coloca este delay para que no se perciba el cambio en los displays por el ojo humano
   }
 }
 
@@ -280,12 +326,12 @@ void valor_temperatura(){
   valorestemperatura[2] = ((temperatura) / 10) % 10;
   valorestemperatura[1] = ((temperatura) / 100) % 10;
   valorestemperatura[0] = ((temperatura) / 1000) % 10;
-}
+}*/
 
 //************************************************************************
 //Función para LED en Adafruit
 //************************************************************************
-void handleMessage(AdafruitIO_Data *data) {
+/*void handleMessage(AdafruitIO_Data *data) {
   Serial.print("recieved <-");
   Serial.println(data->value());
   if(*data->value() == '1'){
@@ -305,4 +351,4 @@ void handleMessage(AdafruitIO_Data *data) {
   } else{
     estadoG = false;
   }
-}
+}*/
