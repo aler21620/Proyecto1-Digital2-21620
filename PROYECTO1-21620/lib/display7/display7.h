@@ -12,18 +12,19 @@
 //**************************************************************************************************
 //Variables globales
 //**************************************************************************************************
-extern uint8_t pinDisplayA, pinDisplayB, pinDisplayC, pinDisplayD, pinDisplayE, pinDisplayF, pinDisplayG;  
-
+extern uint8_t pinA, pinB, pinC, pinD, pinE, pinF, pinG, pindP;  
 
 //**************************************************************************************************
 //Prototipos de funciones
 //**************************************************************************************************
 //Función para configurar el display de 7 segmentos
-void configdisplay7(uint8_t pinDisplayA, uint8_t pinDisplayB, uint8_t pinDisplayC, uint8_t pinDisplayD, uint8_t pinDisplayE, uint8_t pinDisplayF, uint8_t pinDisplayG);
+void configdisplay7(uint8_t pA, uint8_t pB, uint8_t pC, uint8_t pD, uint8_t pE, uint8_t pF, uint8_t pG, uint8_t pdP);
 
 //Función para desplegar el valor al 7 segmentos
 void valor(uint8_t valor);
 
-
+//Función para desplegar el punto
+void verpunto(boolean punto);
 
 #endif // __DISPLAY7_H__
+

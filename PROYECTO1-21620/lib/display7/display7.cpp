@@ -3,137 +3,148 @@
 //**************************************************************************************************
 #include "display7.h"
 
-uint8_t pinDisplayA, pinDisplayB, pinDisplayC, pinDisplayD, pinDisplayE, pinDisplayF, pinDisplayG;  
+uint8_t pinA, pinB, pinC, pinD, pinE, pinF, pinG, pindP;  
 
 //**************************************************************************************************
 //Funciones
 //**************************************************************************************************
 //Función para configurar el display de 7 segmentos
-void configdisplay7(uint8_t pinDisplayA, uint8_t pinDisplayB, uint8_t pinDisplayC, uint8_t pinDisplayD, uint8_t pinDisplayE, uint8_t pinDisplayF, uint8_t pinDisplayG){
+void configdisplay7(uint8_t pA, uint8_t pB, uint8_t pC, uint8_t pD, uint8_t pE, uint8_t pF, uint8_t pG, uint8_t pdP){
     //Dar valor a la variable global
-    pinDisplayA = pinDisplayA;
-    pinDisplayB = pinDisplayB;
-    pinDisplayC = pinDisplayC;
-    pinDisplayD = pinDisplayD;
-    pinDisplayE = pinDisplayE;
-    pinDisplayF = pinDisplayF;
-    pinDisplayG = pinDisplayG;
+    pinA = pA;
+    pinB = pB;
+    pinC = pC;
+    pinD = pD;
+    pinE = pE;
+    pinF = pF;
+    pinG = pG;
+    pindP = pdP;
 
     //Configuración de todos los pines como salidas
-    pinMode(pinDisplayA, OUTPUT);
-    pinMode(pinDisplayB, OUTPUT);
-    pinMode(pinDisplayC, OUTPUT);
-    pinMode(pinDisplayD, OUTPUT);
-    pinMode(pinDisplayE, OUTPUT);
-    pinMode(pinDisplayF, OUTPUT);
-    pinMode(pinDisplayG, OUTPUT);
+    pinMode(pinA, OUTPUT);
+    pinMode(pinB, OUTPUT);
+    pinMode(pinC, OUTPUT);
+    pinMode(pinD, OUTPUT);
+    pinMode(pinE, OUTPUT);
+    pinMode(pinF, OUTPUT);
+    pinMode(pinG, OUTPUT);
+    pinMode(pindP, OUTPUT);
 
     //Configuración para apagar todos los pines
-    digitalWrite(pinDisplayA, LOW);
-    digitalWrite(pinDisplayB, LOW);
-    digitalWrite(pinDisplayC, LOW);
-    digitalWrite(pinDisplayD, LOW);
-    digitalWrite(pinDisplayE, LOW);
-    digitalWrite(pinDisplayF, LOW);
-    digitalWrite(pinDisplayG, LOW);
+    digitalWrite(pinA, LOW);
+    digitalWrite(pinB, LOW);
+    digitalWrite(pinC, LOW);
+    digitalWrite(pinD, LOW);
+    digitalWrite(pinE, LOW);
+    digitalWrite(pinF, LOW);
+    digitalWrite(pinG, LOW);
+    digitalWrite(pindP, LOW);
 }
 
 //Función para desplegar el valor al 7 segmentos
 void valor(uint8_t valor){
     switch (valor) {
     case 0:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, HIGH);
-        digitalWrite(pinDisplayE, HIGH);
-        digitalWrite(pinDisplayF, HIGH);
-        digitalWrite(pinDisplayG, LOW);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, HIGH);
+        digitalWrite(pinE, HIGH);
+        digitalWrite(pinF, HIGH);
+        digitalWrite(pinG, LOW);
         break;
     case 1:
-        digitalWrite(pinDisplayA, LOW);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, LOW);
-        digitalWrite(pinDisplayE, LOW);
-        digitalWrite(pinDisplayF, LOW);
-        digitalWrite(pinDisplayG, LOW);
+        digitalWrite(pinA, LOW);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, LOW);
+        digitalWrite(pinE, LOW);
+        digitalWrite(pinF, LOW);
+        digitalWrite(pinG, LOW);
         break;
     case 2:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, LOW);
-        digitalWrite(pinDisplayD, HIGH);
-        digitalWrite(pinDisplayE, HIGH);
-        digitalWrite(pinDisplayF, LOW);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, LOW);
+        digitalWrite(pinD, HIGH);
+        digitalWrite(pinE, HIGH);
+        digitalWrite(pinF, LOW);
+        digitalWrite(pinG, HIGH);
         break;
     case 3:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, HIGH);
-        digitalWrite(pinDisplayE, LOW);
-        digitalWrite(pinDisplayF, LOW);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, HIGH);
+        digitalWrite(pinE, LOW);
+        digitalWrite(pinF, LOW);
+        digitalWrite(pinG, HIGH);
         break;
     case 4:
-        digitalWrite(pinDisplayA, LOW);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, LOW);
-        digitalWrite(pinDisplayE, LOW);
-        digitalWrite(pinDisplayF, HIGH);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, LOW);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, LOW);
+        digitalWrite(pinE, LOW);
+        digitalWrite(pinF, HIGH);
+        digitalWrite(pinG, HIGH);
         break;
     case 5:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, LOW);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, HIGH);
-        digitalWrite(pinDisplayE, LOW);
-        digitalWrite(pinDisplayF, HIGH);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, LOW);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, HIGH);
+        digitalWrite(pinE, LOW);
+        digitalWrite(pinF, HIGH);
+        digitalWrite(pinG, HIGH);
         break;
     case 6:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, LOW);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, HIGH);
-        digitalWrite(pinDisplayE, HIGH);
-        digitalWrite(pinDisplayF, HIGH);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, LOW);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, HIGH);
+        digitalWrite(pinE, HIGH);
+        digitalWrite(pinF, HIGH);
+        digitalWrite(pinG, HIGH);
         break;
     case 7:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, LOW);
-        digitalWrite(pinDisplayE, LOW);
-        digitalWrite(pinDisplayF, LOW);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, LOW);
+        digitalWrite(pinE, LOW);
+        digitalWrite(pinF, LOW);
+        digitalWrite(pinG, LOW);
         break;
     case 8:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, HIGH);
-        digitalWrite(pinDisplayE, HIGH);
-        digitalWrite(pinDisplayF, HIGH);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, HIGH);
+        digitalWrite(pinE, HIGH);
+        digitalWrite(pinF, HIGH);
+        digitalWrite(pinG, HIGH);
         break;
     case 9:
-        digitalWrite(pinDisplayA, HIGH);
-        digitalWrite(pinDisplayB, HIGH);
-        digitalWrite(pinDisplayC, HIGH);
-        digitalWrite(pinDisplayD, HIGH);
-        digitalWrite(pinDisplayE, LOW);
-        digitalWrite(pinDisplayF, HIGH);
-        digitalWrite(pinDisplayG, HIGH);
+        digitalWrite(pinA, HIGH);
+        digitalWrite(pinB, HIGH);
+        digitalWrite(pinC, HIGH);
+        digitalWrite(pinD, HIGH);
+        digitalWrite(pinE, LOW);
+        digitalWrite(pinF, HIGH);
+        digitalWrite(pinG, HIGH);
         break;
     
     default:
     Serial.print("Ese valor no se puede mostrar \n");
         break;
+    }
+}
+
+void verpunto(boolean punto){
+    if(punto){
+        digitalWrite(pindP, HIGH);
+    }else {
+        digitalWrite(pindP,LOW);
     }
 }
