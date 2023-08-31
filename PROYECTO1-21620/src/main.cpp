@@ -83,7 +83,7 @@ const float TEMP_MEDIUM = 25.0; //Valor medio de temperatura para considerarlo e
 const float TEMP_HIGH = 26.0; //Valor medio de temperatura para considerarlo en estado alto 
 int SERVO_LOW = 45; //Posición específica del servo para el estado bajo 
 int SERVO_MEDIUM = 90; //Posición específica del servo para el estado medio
-int SERVO_HIGH = 135; //Posición específica del servo para el estao alto 
+int SERVO_HIGH = 135; //Posición específica del servo para el estado alto 
 
 //**************************************************************************************************
 // Configuración
